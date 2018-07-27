@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html  lang="ja">
+<head>
+<meta charset="utf-8">
+  <title>Book Director result</title>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/b-1.5.2/b-colvis-1.5.2/b-html5-1.5.2/b-print-1.5.2/fh-3.1.4/r-2.2.2/datatables.min.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/b-1.5.2/b-colvis-1.5.2/b-html5-1.5.2/b-print-1.5.2/fh-3.1.4/r-2.2.2/datatables.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+  <link href="/static/style.css" rel="stylesheet" />
+</head>
+<body>
+    <h3>「{{ keyword1 }}」 「{{ keyword2 }}」 「{{ keyword3 }}」　での検索結果です。</h3>
+    <h4>チェック後、送信して下さい。</h4>
+<form action="{{ url_for('printout')}}" method="POST">
+  <button type="submit">送信</button>
+  <table id="myTable">
+    <thead>
+      <tr>
+        <th>発注チェック</th>
+        <th>表紙</th>
+        <th>タイトル</th>
+        <th>著者</th>
+        <th>出版社</th>
+        <th>JAN</th>
+        <th>ランキング</th>
+        <th>発売日</th>
+        <th>価格</th>
+        <th>商品情報</th>
+      </tr>
+    </thead>
+
+    <tbody>
+        {% for i,v in output_df.iterrows() %}
+        <tr>
+          <td>
+            <input type="checkbox" name="order" value="{{ v["JAN"] }}" >
+          </td>
+          <td><img src='{{ v["image"] }}' /></td>
+          <td><a href='{{ v["url"] }}'>{{ v["title"] }}</a></td>
+          <td>{{ v["author"] }}</td>
+          <td>{{ v["publisher"] }}</td>
+          <td>{{ v["JAN"] }}</td>
+          <td>{{ v["rank"]}}</td>
+          <td>{{ v["date"] }}</td>
+          <td>{{ v["price"] }}</td>
+          <td><p style="font-size:0.7em">{{ v["content"] }}</p></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</form>
+
+<!-- {{ output_table | safe }} -->
+<!--
+<script>
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+</script>
+-->
+<script>
+$(document).ready(function() {
+    $('#myTable').DataTable({
+        dom: 'Bfrtip',
+        select: true,
+        buttons: [{
+            extend: 'excelHtml5',
+            customize: function(xlsx) {
+                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                // Loop over the cells in column `C`
+                $('row c[r^="A"]', sheet).each( function () {
+                    if( this.checked ){
+                      $(this).attr("value", "1");
+                    }
+                    // Get the value
+                  //  if ( $('is t', this).text() == 'New York' ) {
+                  //      $(this).attr( 's', '20' );
+                  //  }
+                });
+            }
+        }]
+    });
+});
+</script>
+</body>
+</html>
