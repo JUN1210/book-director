@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html  lang="ja">
+<head>
+<meta charset="utf-8">
+    <title>Book Director</title>
+</head>
+<body>
+<form method="post" action="{{ url_for('output')}}">
+    <h3>キーワードを入力して下さい。1分ほど時間がかかります</h3>
+    <p><label>キーワード：<input type="text" name="keyword1" size="40"></label></p>
+    <p><label>キーワード：<input type="text" name="keyword2" size="40"></label></p>
+    <p><label>キーワード：<input type="text" name="keyword3" size="40"></label></p>
+    <button type="submit">送信</button>
+    <p>商品情報はAPIで公開されていないものが多いため、ブランクがおおいです。リンク先でご検討下さい。</p>
+</form>
+</body>
+</html>
