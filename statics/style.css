@@ -1,0 +1,11 @@
+p {
+  font-size: 0.7em;
+}
+
+img {
+  max-height: 200px;
+}
+
+tr:nth-child(odd) {
+  background-color: #efefff;
+}
